@@ -1,3 +1,9 @@
+# Run: 
+Run the code by typing the following from the directory the code is located in 
+python3 import.py 
+OR if you do not have python3 namespacing you can type
+python improt.py 
+
 ##Overview: ## 
 Simulates bulk manual transaction adds to mint.com. Mint manual transactions are submitted as "cash transactions" which 
 will mean it shows in your cash / all accounts transaction list. You cannot submit manual transactions against credit 
