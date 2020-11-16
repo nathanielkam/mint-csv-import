@@ -76,12 +76,13 @@ account = 'XXXXXXX' # grab from POST request form body in devtools
 tag1 = 'tagXXXXXX' # in form of tagXXXXXXX
 tag2 = 'tagXXXXXXX' # in form of tagXXXXXXX
 tag3 = 'tagXXXXXXX' # in form of tagXXXXXXX
-cookie = 'XXXXXXX' # grab from POST request header in devtools 
-referrer = 'XXXXXXX' # grab from POST request header in devtools 
-token = 'XXXXXXX' # grab from POST request form body in devtools 
+cookie = 'XXXXXXX' # grab from POST request header in devtools
+referrer = 'XXXXXXX' # grab from POST request header in devtools
+token = 'XXXXXXX' # grab from POST request form body in devtools
+
 """
 #################################
-Import CSV using the pythons csv reader 
+#Import CSV using the pythons csv reader 
 #################################
 """
 csv_object = csv.reader(open(csv_name,'rU'))
@@ -93,7 +94,7 @@ for row in csv_object:
 	date = (row[0]) 
 	postDate = (row[1])
 	merchant = (row[2])
-	catID = (row[3])
+	catName = (row[3])
 	typeID = (row[4])
 	amount = (float(row[5]))
 	expense = 'true'
@@ -289,128 +290,6 @@ for row in csv_object:
 		# Get the mint category ID from the map 
 		return switcher.get(import_category,20) # For all other unmapped cases return uncategorized category "20" 
 
-	# Category NAME Mapping Function 
-	def category_name_switch(mint_id):
-
-		# Define mapping of import categories to : Mint Category IDs
-		switcher={
-			# All default mint categories are listed here. Your custom categories will not be here. If you have custome categories
-			# you want to use, you'll need to add a mapping for them here and in the category_id_switch above.
-			14:'Auto & Transport',
-			1405:'Auto Insurance',
-			1404:'Auto Payment',
-			1401:'Gas & Fuel',
-			1402:'Parking',
-			1406:'Public Transportation',
-			1403:'Service & Parts',
-			13:'Bills & Utilities',
-			1302:'Home Phone',
-			1303:'Internet',
-			1304:'Mobile Phone',
-			1301:'Television',
-			1306:'Utilities',
-			17:'Business Services',
-			1701:'Advertising',
-			1705:'Legal',
-			1702:'Office Supplies',
-			1703:'Printing',
-			1704:'Shipping',
-			10:'Education',
-			1003:'Books & Supplies',
-			1002:'Student Loan',
-			1001:'Tuition',
-			1:'Entertainment',
-			102:'Amusement',
-			101:'Arts',
-			104:'Movies & DVDs',
-			103:'Music',
-			105:'Newspapers & Magazines',
-			16:'Fees & Charges',
-			1605:'ATM Fee',
-			1606:'Bank Fee',
-			1604:'Finance Charge',
-			1602:'Late Fee',
-			1601:'Service Fee',
-			1607:'Trade Commissions',
-			11:'Financial',
-			1105:'Financial Advisor',
-			1102:'Life Insurance',
-			7:'Food & Dining',
-			708:'Alcohol & Bars',
-			704:'Coffee Shops',
-			706:'Fast Food',
-			701:'Groceries',
-			707:'Restaurants',
-			8:'Gifts & Donations',
-			802:'Charity',
-			801:'Gift',
-			5:'Health & Fitness',
-			501:'Dentist',
-			502:'Doctor',
-			503:'Eyecare',
-			507:'Gym',
-			506:'Health Insurance',
-			505:'Pharmacy',
-			508:'Sports',
-			12:'Home',
-			1201:'Furnishings',
-			1203:'Home Improvement',
-			1206:'Home Insurance',
-			1204:'Home Services',
-			1208:'Home Supplies',
-			1202:'Lawn & Garden',
-			1207:'Mortgage & Rent',
-			30:'Income',
-			3004:'Bonus',
-			3005:'Interest Income',
-			3001:'Paycheck',
-			3006:'Reimbursement',
-			3007:'Rental Income',
-			3003:'Returned Purchase',
-			6:'Kids',
-			610:'Allowance',
-			611:'Baby Supplies',
-			602:'Babysitter & Daycare',
-			603:'Child Support',
-			609:'Kids Activities',
-			606:'Toys',
-			70:'Misc Expenses',
-			4:'Personal Care',
-			403:'Hair',
-			406:'Laundry',
-			404:'Spa & Massage',
-			9:'Pets',
-			901:'Pet Food & Supplies',
-			902:'Pet Grooming',
-			903:'Veterinary',
-			2:'Shopping',
-			202:'Books',
-			201:'Clothing',
-			204:'Electronics & Software',
-			206:'Hobbies',
-			207:'Sporting Goods',
-			19:'Taxes',
-			1901:'Federal Tax',
-			1903:'Local Tax',
-			1905:'Property Tax',
-			1904:'Sales Tax',
-			1902:'State Tax',
-			21:'Transfer',
-			2101:'Credit Card Payment',
-			2102:'Transfer for Cash Spending',
-			15:'Travel',
-			1501:'Air Travel',
-			1502:'Hotel',
-			1503:'Rental Car & Taxi',
-			1504:'Vacation',
-			20:'Uncategorized',
-			2001:'Cash & ATM',
-			2002:'Check',
-			40:'Hide from Budgets & Trends',
-		} 
-		# Get the mint category NAME from the map 
-		return switcher.get(mint_id,'Uncategorized') # For all other unmapped cases return uncategorized category "20" 
-
 	# typeID payment overrides all categories 
 	if typeID == "Payment":
 		catID = '2101' # Since I was importing credit cards I have mine set to credit card payment. If you are doing bank accounts you many want to change this to payment general
@@ -419,17 +298,17 @@ for row in csv_object:
 	else:
 
 		# if there IS no cat it is uncategorized 
-		if len(catID) == 0: 
+		if len(catName) == 0: 
 			catID = '20' # mint's uncategorized category
 
 		# If there is a category check it against mapping	
 		else : 
 			# Use a switch since there may be MANY category maps 
-			catID = str(category_id_switch(catID))
+			catID = str(category_id_switch(catName))
 
 
 	# Set mint category name by looking up name in ID map 
-	category = category_name_switch(catID)
+	category = catName
 	category = urllib.parse.quote(category)
 
 	"""
@@ -470,7 +349,7 @@ for row in csv_object:
 	# Fragment the curl form data 	
 	form_p1 = "'cashTxnType=on&mtCheckNo=&" + tag1 + "=0&" + tag2 + "=0&" + tag3 + "=0&"
 	form_p2 = "task=txnadd&txnId=%3A0&mtType=cash&mtAccount=" + account + "&symbol=&note=&isInvestment=false&"
-	form_p3 = "catId="+catID+"&category="+category+"&merchant="+merchant+"&date="+dateoutput+"&amount="+amount+"&mtIsExpense="+expense+"&mtCashSplitPref=2&"
+	form_p3 = "catId="+catID+"&category="+category+"&merchant="+merchant+"&date="+dateoutput+"&amount="+amount+"&mtIsExpense="+expense+"&mtCashSplitPref=1&mtCashSplit=on&"
 	form_p4 = "token=" + token + "'"
 
 	# Piece together curl form data 
