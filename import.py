@@ -82,7 +82,7 @@ token = 'XXXXXXX' # grab from POST request form body in devtools
 
 """
 #################################
-#Import CSV using the pythons csv reader 
+Import CSV using the pythons csv reader 
 #################################
 """
 csv_object = csv.reader(open(csv_name,'rU'))
