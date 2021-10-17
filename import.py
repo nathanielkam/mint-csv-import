@@ -113,8 +113,8 @@ for row in csv_object:
     # Require "/" for date delimiter and HTTP Encode Character, supports "/", ".", "-"
     # We are not using url encode library here because we custom map other delimiters
     dateoutput = date.replace("/", "%2F")
-    dateoutput = date.replace(".", "%2F")
-    dateoutput = date.replace("-", "%2F")
+    dateoutput = dateoutput.replace(".", "%2F")
+    dateoutput = dateoutput.replace("-", "%2F")
 
     """
     #################################
