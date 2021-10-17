@@ -12,7 +12,7 @@ Overview:
 
 Simulates bulk manual transaction adds to mint.com. Mint manual transactions are submitted as "cash transactions" which 
 will mean it shows in your cash / all accounts transaction list. You cannot submit manual transactions against credit 
-cards or other integrated bank accounts (even in Mint's UI this is not possible and ends up as cash transction). 
+cards or other integrated bank accounts (even in Mint's UI this is not possible and ends up as cash transaction). 
 
 Approach Credits: 
 Simulating manual transactions from UI is based on Nate H's proof of concept from https://www.youtube.com/watch?v=8AJ3g5JGmdU
@@ -24,14 +24,14 @@ Process Documentation:
 1. Import CSV
 2. Process date for correct format and HTTP encode result 
 3. Process merchant for HTTP encode
-4. Process cateogories change your banks category name into a mint category ID (limited in scope based on the categories
+4. Process categories change your banks category name into a mint category ID (limited in scope based on the categories
 5 needed when I wrote this)
 6. Process amount for positive or negative value indicating income or expense 
 7. Send POST Request to mint as new transaction. 
 8. Force Randomized Wait Time before starting next request
 
 Future Development:
-1. Replace curl command string generation with parametized curl class constructor 
+1. Replace curl command string generation with parametrized curl class constructor 
 2. Add support for the rest of the manual transaction items
 
 """
@@ -41,7 +41,7 @@ Future Development:
 Settings 
 #################################
 """
-csv_name = 'import.csv'  # name of csv you you want import to mint [string.csv]
+csv_name = 'import.csv'  # name of csv you want import to mint [string.csv]
 verbose_output = 1  # should verbose messages be printed [0,1]
 uk_to_us = 0  # do you need to change dates from UK to US format [0,1]
 min_wait = 0  # min wait time in seconds between requests, int[0-n]
@@ -100,7 +100,7 @@ def category_id_switch(import_category):
         'Restaurant-Restaurant': 707,
         'Payment': 2101,
         # The following categories are Mint categories.
-        # Citi does not included categories in downloaded transactions so I added my own categories using the Mint categories.
+        # Citi does not include categories in downloaded transactions, so I added my own categories using the Mint categories.
         # These mappings make sure those categories don't get mapped to 'uncategorized:20' when they aren't found in the mappings
         # for the other banks above.
         #
@@ -239,7 +239,7 @@ with open(csv_name, 'rU') as import_file:
         # Convert Commonwealth to US Date System
         if uk_to_us == 1:  # based on setting
             dateconv = time.strptime(date, "%d/%m/%Y")  # not needed for US to US
-            date = (time.strftime("%m/%d/%Y", dateconv))  # converted new US date format from UK
+            date = time.strftime("%m/%d/%Y", dateconv)  # converted new US date format from UK
 
         # Require "/" for date delimiter and HTTP Encode Character, supports "/", ".", "-"
         # We are not using url encode library here because we custom map other delimiters
@@ -300,7 +300,7 @@ with open(csv_name, 'rU') as import_file:
         """
         #################################
         Build CURL POST Request
-        TODO: Swap command string generation for parametized curl class 
+        TODO: Swap command string generation for parametrized curl class 
         #################################
         """
 
