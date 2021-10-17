@@ -74,6 +74,8 @@ Import CSV using the pythons csv reader
 def category_id_switch(import_category):
     # Define mapping of import categories to : Mint Category IDs
     switcher = {
+        # if there IS no cat it is uncategorized
+        '': 20,
         # Chase categories - incomplete
         'Gas': 1401,
         'Food & Drink': 7,
@@ -273,19 +275,10 @@ with open(csv_name, 'rU') as import_file:
 
         # if type is NOT payment then do a category check
         else:
-
-            # if there IS no cat it is uncategorized
-            if len(catName) == 0:
-                catID = '20'  # mint's uncategorized category
-
-            # If there is a category check it against mapping
-            else:
-                # Use a switch since there may be MANY category maps
-                catID = category_id_switch(catName)
+            catID = category_id_switch(catName)
 
         # Set mint category name by looking up name in ID map
-        category = catName
-        category = urllib.parse.quote(category)
+        category = urllib.parse.quote(catName)
 
         """
         #################################
