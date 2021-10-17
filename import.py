@@ -15,10 +15,8 @@ OR if you are using pip3
 """
 
 import csv
-import datetime
 import os
 import random
-import requests
 import time
 import urllib.parse
 
