@@ -19,6 +19,7 @@ import os
 import random
 import time
 import urllib.parse
+from decimal import Decimal
 
 """
 #################################
@@ -240,7 +241,7 @@ with open(csv_name, 'rU') as import_file:
         merchant = row[2]
         catName = row[3]
         typeID = row[4]
-        amount = float(row[5])
+        amount = row[5]
         expense = 'true'
         curl_input = 'Error: Did not Generate'
         curl_output = 'Error: Did not run'
@@ -307,7 +308,7 @@ with open(csv_name, 'rU') as import_file:
         Process Amount seeing if transaction is an expense or income.   
         #################################
         """
-        if amount < 0:
+        if Decimal(amount) < 0:
             expense = 'true'  # when amount is less than 0 this is an expense, ie money left your account, ex like buying a sandwich.
         else:
             expense = 'false'  # when amount is greater than 0 this is income, ie money went INTO your account, ex like a paycheck.
