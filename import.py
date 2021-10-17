@@ -1,19 +1,3 @@
-"""
-#################################
-Pre-requisites needed
-#################################
-
-If you are missing any of the following you can install with:
-
-    pip install $name
-    Example: pip install csv
-
-OR if you are using pip3
-
-    pip3 install $name
-    Example: pip3 install csv
-"""
-
 import csv
 import os
 import random
