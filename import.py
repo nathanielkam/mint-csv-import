@@ -278,7 +278,7 @@ for row in csv_object:
             'Hide from Budgets & Trends': 40,
         }
         # Get the mint category ID from the map
-        return switcher.get(import_category, 20)  # For all other unmapped cases return uncategorized category "20"
+        return str(switcher.get(import_category, 20))  # For all other unmapped cases return uncategorized category "20"
 
 
     # typeID payment overrides all categories
@@ -295,7 +295,7 @@ for row in csv_object:
         # If there is a category check it against mapping
         else:
             # Use a switch since there may be MANY category maps
-            catID = str(category_id_switch(catName))
+            catID = category_id_switch(catName)
 
     # Set mint category name by looking up name in ID map
     category = catName
@@ -310,7 +310,6 @@ for row in csv_object:
         expense = 'true'  # when amount is less than 0 this is an expense, ie money left your account, ex like buying a sandwich.
     else:
         expense = 'false'  # when amount is greater than 0 this is income, ie money went INTO your account, ex like a paycheck.
-    amount = str(amount)  # convert amount to string so it can be concatenated in POST request
 
     """
     #################################
@@ -319,41 +318,39 @@ for row in csv_object:
     #################################
     """
 
-    # Break curl lines
-    curl_line = " "
 
     # fragment curl command
-    curl_command = "curl -i -s -k -X POST 'https://mint.intuit.com/updateTransaction.xevent'" + curl_line
-    curl_host = "-H 'Host: mint.intuit.com'" + curl_line
-    curl_user_agent = "-H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36'" + curl_line
-    curl_accept = "-H 'Accept: */*'" + curl_line
-    curl_accept_language = "-H 'Accept-Language: en-US,en;q=0.5'" + curl_line
-    curl_compressed = "--compressed" + curl_line
-    curl_x_requested_with = "-H 'X-Requested-With: XMLHttpRequest'" + curl_line
-    curl_content_type = "-H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8'" + curl_line
-    curl_referer = "-H 'Referer: https://mint.intuit.com/transaction.event?accountId=" + referrer + "'" + curl_line
-    curl_cookie = "-H 'Cookie: " + cookie + "'" + curl_line
-    curl_connection = "-H 'Connection: close' " + curl_line
-    curl_data = "--data" + curl_line
-
-    # Fragment the curl form data
-    form_p1 = "'cashTxnType=on&mtCheckNo=&" + tag1 + "=0&" + tag2 + "=0&" + tag3 + "=0&"
-    form_p2 = "task=txnadd&txnId=%3A0&mtType=cash&mtAccount=" + account + "&symbol=&note=&isInvestment=false&"
-    form_p3 = "catId=" + catID + "&category=" + category + "&merchant=" + merchant + "&date=" + dateoutput + "&amount=" + amount + "&mtIsExpense=" + expense + "&mtCashSplitPref=1&mtCashSplit=on&"
-    form_p4 = "token=" + token + "'"
+    curl_command = "curl -i -s -k -X POST 'https://mint.intuit.com/updateTransaction.xevent'"
+    curl_host = "-H 'Host: mint.intuit.com'"
+    curl_user_agent = "-H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36'"
+    curl_accept = "-H 'Accept: */*'"
+    curl_accept_language = "-H 'Accept-Language: en-US,en;q=0.5'"
+    curl_compressed = "--compressed"
+    curl_x_requested_with = "-H 'X-Requested-With: XMLHttpRequest'"
+    curl_content_type = "-H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8'"
+    curl_referer = f"-H \'Referer: https://mint.intuit.com/transaction.event?accountId={referrer}\'"
+    curl_cookie = f"-H \'Cookie: {cookie}\'"
+    curl_connection = "-H 'Connection: close' "
+    curl_data = "--data"
 
     # Piece together curl form data
-    curl_form = form_p1 + form_p2 + form_p3 + form_p4
+    curl_form = f"\'cashTxnType=on&mtCheckNo=&{tag1}=0&{tag2}=0&{tag3}=0&" \
+                f"task=txnadd&txnId=%3A0&mtType=cash&mtAccount={account}&symbol=&note=&isInvestment=false&" \
+                f"catId={catID}&category={category}&merchant={merchant}&date={dateoutput}&amount={amount}&mtIsExpense={expense}&mtCashSplitPref=1&mtCashSplit=on&" \
+                f"token={token}\'"
 
     # Combine all curl fragments together into an entire curl command
-    curl_input = curl_command + curl_host + curl_user_agent + curl_accept + curl_accept_language + curl_compressed + curl_x_requested_with + curl_content_type + curl_referer + curl_cookie + curl_connection + curl_data + curl_form
+    curl_input = " ".join([curl_command, curl_host, curl_user_agent,
+                           curl_accept, curl_accept_language, curl_compressed,
+                           curl_x_requested_with, curl_content_type, curl_referer,
+                           curl_cookie, curl_connection, curl_data, curl_form])
 
     """
     #################################
     Submit CURL POST Request
     #################################
     """
-    curl_output = str(os.system(curl_input))  # use os sytem to run a curl request submitting the form post
+    curl_output = str(os.system(curl_input))  # use os system to run a curl request submitting the form post
 
     """
     #################################
