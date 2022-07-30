@@ -1,3 +1,5 @@
+For a complete overview of how the Mint CSV Importer was developed check out - https://nathanielkam.com/import-transactions-to-mint-using-python/
+
 # Run:
 Run the code by typing the following from the directory the code is located in
 python3 import.py
