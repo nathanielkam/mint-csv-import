@@ -31,7 +31,8 @@ Virtual Environment Setup (from app repo root)
 ## Overview: ##
 Simulates bulk manual transaction adds to mint.com. Mint manual transactions are submitted as "cash transactions" which
 will mean it shows in your cash / all accounts transaction list. You cannot submit manual transactions against credit
-cards or other integrated bank accounts (even in Mint's UI this is not possible and ends up as cash transction).
+cards or other integrated bank accounts (even in Mint's UI this is not possible and ends up as cash transction). Follow
+along here for more verbose instructions: https://nathanielkam.com/import-transactions-to-mint-using-python/
 
 ## Approach: ##
 Simulating manual transactions from UI is based on Nate H's proof of concept from https://www.youtube.com/watch?v=8AJ3g5JGmdU
