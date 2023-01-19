@@ -65,7 +65,7 @@ uk_to_us = 0 # do you need to change dates from UK to US format [0,1]
 min_wait = 0 # min wait time in seconds between requests, int[0-n]
 max_wait = 2 # max wait time in seconds between requests, int[0-n]
 default_note = "Bulk import" # Optional - set default note on transactions
-verify_ssl = False # Optional - useful for debugging through a proxy like Fiddler. Should otherwise be True
+verify_ssl = True # Optional - useful for debugging through a proxy like Fiddler. Should otherwise be True
 
 """
 #################################
